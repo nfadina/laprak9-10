@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pemesanan Hotel - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        let rooms = [
+            { type: "Standar", price: 300000 },
+            { type: "Deluxe", price: 500000 },
+            { type: "Family", price: 700000 }
+        ];
+
+        let facilities = ["Kolam Renang", "Restoran", "Gym"];
+        let bookings = [
+        {
+            name: "Dina",
+            roomType: "Deluxe",
+            duration: 3,
+            total: 1500000
+        }
+        ];
+
+
+        function displayAdminData() {
+            const roomTable = document.getElementById('room-table-body');
+            roomTable.innerHTML = '';
+            rooms.forEach((room, index) => {
+                roomTable.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${room.type}</td>
+                        <td>Rp ${room.price.toLocaleString()}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="editRoom(${index})">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteRoom(${index})">Hapus</button>
+                        </td>
+                    </tr>`;
+            });
+
+            const facilityList = document.getElementById('facility-list');
+            facilityList.innerHTML = '';
+            facilities.forEach((facility, index) => {
+                facilityList.innerHTML += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        ${facility}
+                        <button class="btn btn-danger btn-sm" onclick="deleteFacility(${index})">Hapus</button>
+                    </li>`;
+            });
+
+            const bookingTable = document.getElementById('booking-table-body');
+            bookingTable.innerHTML = '';
+            bookings.forEach((booking, index) => {
+                bookingTable.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${booking.name}</td>
+                        <td>${booking.roomType}</td>
+                        <td>${booking.duration} Hari</td>
+                        <td>Rp ${booking.total.toLocaleString()}</td>
+                    </tr>`;
+            });
+        }
+
+        function addRoom(event) {
+            event.preventDefault();
+            const roomType = document.getElementById('roomType').value;
+            const roomPrice = parseInt(document.getElementById('roomPrice').value);
+            rooms.push({ type: roomType, price: roomPrice });
+            displayAdminData();
+        }
+
+        function editRoom(index) {
+            const newType = prompt('Masukkan tipe kamar baru:', rooms[index].type);
+            const newPrice = parseInt(prompt('Masukkan harga baru:', rooms[index].price));
+            if (newType && newPrice) {
+                rooms[index] = { type: newType, price: newPrice };
+                displayAdminData();
+            }
+        }
+
+        function deleteRoom(index) {
+            rooms.splice(index, 1);
+            displayAdminData();
+        }
+
+        function addFacility(event) {
+            event.preventDefault();
+            const facility = document.getElementById('facility').value;
+            facilities.push(facility);
+            displayAdminData();
+        }
+
+        function deleteFacility(index) {
+            facilities.splice(index, 1);
+            displayAdminData();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            displayAdminData();
+        });
+    </script>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center">Sistem Pemesanan Hotel - Admin</h1>
+
+        <!-- Admin Section -->
+        <div id="admin-section">
+            <h3>Admin Panel</h3>
+
+            <!-- Kelola Jenis Kamar -->
+            <h4>Kelola Jenis Kamar</h4>
+            <form onsubmit="addRoom(event)">
+                <div class="mb-3">
+                    <label for="roomType" class="form-label">Tipe Kamar</label>
+                    <input type="text" class="form-control" id="roomType" required>
+                </div>
+                <div class="mb-3">
+                    <label for="roomPrice" class="form-label">Harga Per Malam</label>
+                    <input type="number" class="form-control" id="roomPrice" required>
+                </div>
+                <button type="submit" class="btn btn-success">Tambah</button>
+            </form>
+
+            <table class="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Tipe Kamar</th>
+                        <th>Harga</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="room-table-body"></tbody>
+            </table>
+
+            <!-- Kelola Fasilitas -->
+            <h4 class="mt-4">Kelola Fasilitas</h4>
+            <form onsubmit="addFacility(event)">
+                <div class="mb-3">
+                    <label for="facility" class="form-label">Nama Fasilitas</label>
+                    <input type="text" class="form-control" id="facility" required>
+                </div>
+                <button type="submit" class="btn btn-success">Tambah</button>
+            </form>
+
+            <ul class="list-group mt-3" id="facility-list"></ul>
+
+            <!-- Data Pemesanan Konsumen -->
+            <h4 class="mt-4">Data Pemesanan</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Pemesan</th>
+                        <th>Tipe Kamar</th>
+                        <th>Durasi</th>
+                        <th>Total Bayar</th>
+                    </tr>
+                </thead>
+                <tbody id="booking-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

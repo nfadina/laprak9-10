@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queen Best Hotel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("form").on("submit", function (event) {
+                event.preventDefault(); // Mencegah form untuk dikirim
+
+                // Mengambil nilai dari form
+                const nama = $("#nama").val();
+                const jenisKelamin = $('input[name="jenis_kelamin"]:checked').val();
+                const nomor_id = $("#nomor_id").val();
+                const kamar = $("#kamar").val();
+                const harga = parseFloat($("#harga").val());
+                const tglPesan = $("#tgl_pesan").val();
+                const durasi = parseInt($("#hari").val());
+                const sarapan = $("#sarapan").is(":checked");
+
+                // Validasi Nomor Identitas
+                if (nomor_id.length !== 16) {
+                    alert("Nomor Identitas harus 16 digit.");
+                    return false;
+                }
+
+                // Validasi Durasi Menginap
+                if (isNaN(durasi) || durasi <= 0) {
+                    alert("Durasi menginap harus berupa angka yang valid.");
+                    return false;
+                }
+
+                // Validasi Harga
+                if (isNaN(harga) || harga <= 0) {
+                    alert("Harga harus valid.");
+                    return false;
+                }
+
+                // Menghitung diskon dan biaya tambahan
+                let diskon = 0;
+                if (durasi > 3) {
+                    diskon = 0.1 * harga * durasi; // Diskon 10%
+                }
+
+                let total = harga * durasi - diskon; // Total setelah diskon
+                if (sarapan) {
+                    total += 80000; // Tambah biaya breakfast
+                }
+
+                // Menampilkan Resume Pemesan
+                const resume = `
+                    <h3>Resume Pemesanan</h3>
+                    <p><strong>Nama Pemesan:</strong> ${nama}</p>
+                    <p><strong>Nomor Identitas:</strong> ${nomor_id}</p>
+                    <p><strong>Jenis Kelamin:</strong> ${jenisKelamin ? jenisKelamin : "Belum dipilih"}</p>
+                    <p><strong>Tipe Kamar:</strong> ${kamar}</p>
+                    <p><strong>Durasi Menginap:</strong> ${durasi} Hari</p>
+                    <p><strong>Diskon:</strong> Rp ${diskon.toFixed(2)}</p>
+                    <p><strong>Total Bayar:</strong> Rp ${total.toFixed(2)}</p>
+                `;
+                $("#resume").html(resume);
+            });
+        });
+    </script>
+    <style>
+        body {
+            font-family: "Trebuchet MS", Arial, sans-serif;
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            font-size: 16px;
+            margin-right: 15px;
+            text-transform: uppercase;
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: rgb(182, 215, 243);
+        }
+
+        .header {
+            background-color: black;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .header img {
+            height: 100px;
+        }
+
+        .footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <img src="gambar/logo.jpg" alt="Logo">
+        </div>
+        <h1>Grand Hotel</h1>
+        <img src="gambar/kamar6.jpg" alt="Hotel">
+    </header>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Grand Hotel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#header">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#services">Fasilitas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#kamar">Kamar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#login">Pemesanan Hotel</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Section -->
+    <section id="about" class="py-5">
+        <div class="container">
+            <h2 class="text-center">About Us</h2>
+            <p class="text-center">Grand Hotel adalah hotel terbaik dengan layanan berkualitas dan fasilitas unggulan.</p>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center">Fasilitas</h2>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h4>Breakfast</h4>
+                    <p>Nikmati sarapan lezat untuk memulai hari Anda.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h4>Kolam Renang</h4>
+                    <p>Segarkan diri di kolam renang.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h4>Ruang Kebugaran</h4>
+                    <p>Jaga kebugaran di ruang kebugaran.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kamar Section -->
+    <section id="kamar" class="py-5">
+        <div class="container">
+            <h2 class="text-center">Kamar</h2>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <img src="gambar/kamar1.jpg" class="img-fluid" alt="Kamar 1">
+                </div>
+                <div class="col-md-4">
+                    <img src="gambar/kamar2.jpg" class="img-fluid" alt="Kamar 2">
+                </div>
+                <div class="col-md-4">
+                    <img src="gambar/kamar5.jpg" class="img-fluid" alt="Kamar 3">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pemesanan Section -->
+    <section id="login" class="py-5">
+        <div class="container">
+            <h2 class="text-center">Pemesanan Hotel</h2>
+            <p class="text-center">Pesan kamar impian Anda dengan mudah melalui sistem pemesanan online kami.</p>
+
+            <form>
+                <table border="0" class="mx-auto">
+                    <tr>
+                        <td><label for="nama">Nama Pemesan:</label></td>
+                        <td><input type="text" id="nama" name="nama" maxlength="35" required /></td>
+                    </tr>
+                    <tr>
+                        <td><label for="jenis_kelamin">Jenis Kelamin:</label></td>
+                        <td>
+                            <input type="radio" id="laki_laki" name="jenis_kelamin" value="Laki-Laki" required /> Laki-Laki
+                            <input type="radio" id="perempuan" name="jenis_kelamin" value="Perempuan" /> Perempuan
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="nomor_id">Nomor Identitas (16 digit):</label></td>
+                        <td><input type="text" id="nomor_id" name="nomor_id" maxlength="16" required /></td>
+                    </tr>
+                    <tr>
+                        <td><label for="kamar">Tipe Kamar:</label></td>
+                        <td>
+                            <select name="kamar" id="kamar" required>
+                                <option value="">--Pilih Salah Satu--</option>
+                                <option value="Standar">STANDAR</option>
+                                <option value="Deluxe">DELUXE</option>
+                                <option value="Family">FAMILY</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="harga">Harga (per malam):</label></td>
+                        <td><input type="text" id="harga" name="harga" required /></td>
+                    </tr>
+                    <tr>
+                        <td><label for="tgl_pesan">Tanggal Pesan:</label></td>
+                        <td><input type="date" id="tgl_pesan" name="tgl_pesan" required /></td>
+                    </tr>
+                    <tr>
+                        <td><label for="hari">Durasi Menginap (Hari):</label></td>
+                        <td><input type="number" id="hari" name="hari" required /></td>
+                    </tr>
+                    <tr>
+                        <td><label for="sarapan">Termasuk Breakfast:</label></td>
+                        <td><input type="checkbox" id="sarapan" name="sarapan" value="ya" /> Ya</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><button type="submit" class="btn btn-primary">SIMPAN</button></td>
+                    </tr>
+                </table>
+            </form>
+
+            <div id="resume"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer mt-4">
+        <p>&copy; 2025 Grand Hotel</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
